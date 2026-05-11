@@ -16,26 +16,16 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios'
+import api from '../service/api'; // Import the configured axios instance
 
 const Dashboard = () => {
-  const stats = [
-    { label: 'TOTAL TRIPS', value: '24', icon: <Truck className="text-gray-400" />, color: 'text-gray-800' },
-    { label: 'ACTIVE TRIPS', value: '3', icon: <RotateCcw className="text-blue-500" />, color: 'text-gray-800' },
-    { label: 'TOTAL FREIGHT', value: '₹8.4L', icon: <TrendingUp className="text-orange-500" />, color: 'text-gray-800' },
-    { label: 'NET PROFIT', value: '₹2.1L', icon: <Package className="text-green-500" />, color: 'text-green-600' },
-  ];
-
-  const recentTrips = [
-    { route: 'Delhi → Mumbai', truck: 'DL8CAB7806', driver: 'Ramu', freight: '₹1,50,000', profit: '+₹39,000', status: 'Active' },
-    { route: 'Jaipur → Ludhiana', truck: 'HR55AB1234', driver: 'Shyam', freight: '₹85,000', profit: '+₹22,400', status: 'Done' },
-    { route: 'Chandigarh → Delhi', truck: 'PBO9CD5678', driver: 'Vikram', freight: '₹60,000', profit: '-₹4,200', status: 'Done' },
-  ];
-
-  const navigate = useNavigate();
-  const [isValidated, setIsValidated] = useState(false); // New state
+    const navigate = useNavigate();
+    const [isValidated, setIsValidated] = useState(false); // New state
+    const [dashboardData, setDashboardData] = useState({}); // State to hold dashboard data
+    const [tripDetails, setTripDetails] = useState([]); // State for selected trip details
+  
 
 useEffect(() => {
-  let cancelled = false;
 
   const verifyToken = async () => {
     const raw = document.cookie
@@ -44,7 +34,6 @@ useEffect(() => {
       ?.substring('token='.length);
 
     if (!raw) {
-      if (!cancelled) navigate('/login');
       return;
     }
 
@@ -52,23 +41,63 @@ useEffect(() => {
     console.log("Sending token:", formattedToken); // ✅ log before the request
 
     try {
-      await axios.get('http://localhost:8080/api/v1/auth/verify', {
+      await api.get('/auth/verify', {
         headers: { 'Authorization': formattedToken }
       });
-      if (!cancelled) setIsValidated(true);
+    setIsValidated(true); // ✅ set validated on success
     } catch (err) {
       console.error("Verify failed:", err.response?.status, err.response?.data);
-      if (!cancelled) navigate('/login');
+    navigate('/login'); // ✅ navigate on failure
     }
   };
 
-  verifyToken();
+  const fetchDashboardData = async () => {
+    try {
+      const response = await api.get('/user/balance');
+      const responsedata = response.data;
+      setDashboardData(responsedata); // ✅ update state with fetched data
+      console.log("Dashboard data:", response.data); // ✅ log the fetched data
+    } catch (err) {
+      console.error("Failed to fetch dashboard data:", err.response?.data || err.message);
+    }
+  };
 
-  return () => { cancelled = true; };
+  const fetchTripDetails = async () => {
+    try {
+      const response = await api.get(`/trip/`);
+      console.log("Trip details:", response.data);
+      setTripDetails(response.data); // Update state with trip details
+    } catch (err) {
+      console.error("Failed to fetch trip details:", err.response?.data || err.message);
+    }
+ };
+
+  verifyToken();
+  fetchDashboardData();
+  fetchTripDetails(); // You can pass a specific tripId if needed   
+
 }, []);
 
     // If not validated yet, show nothing or a spinner
     if (!isValidated) return <div className="bg-[#0f172a] min-h-screen text-white p-10">Verifying session...</div>;
+
+    const stats = [
+    { label: 'TOTAL TRIPS', value: dashboardData.totalTrips || 0, icon: <Truck className="text-gray-400" />, color: 'text-gray-800' },
+    { label: 'ACTIVE TRIPS', value: dashboardData.activeTrips || 0, icon: <RotateCcw className="text-blue-500" />, color: 'text-gray-800' },
+    { label: 'TOTAL FREIGHT', value: dashboardData.totalFreightEarned || 0, icon: <TrendingUp className="text-orange-500" />, color: 'text-gray-800' },
+    { label: 'NET PROFIT', value: dashboardData.profit || 0, icon: <Package className="text-green-500" />, color: 'text-green-600' },
+  ];
+
+    const recentTrips = Array.isArray(tripDetails) 
+        ? tripDetails.map(trip => ({
+            route: `${trip.source} → ${trip.destination}`,
+            truck: trip.vehicleNumber,
+            driver: trip.driverName,
+            freight: trip.freightPrice,
+            profit: trip.profit,
+            status: trip.status === 'ACTIVE' ? 'Active' : 'Completed',
+            }))
+        : []; // Fallback to empty array if data isn't ready
 
   return (
     
@@ -154,11 +183,11 @@ useEffect(() => {
                 <tbody className="divide-y divide-gray-50">
                   {recentTrips.map((trip, idx) => (
                     <tr key={idx} className="hover:bg-gray-50/50 transition-colors">
-                      <td className="px-6 py-4 font-semibold text-gray-800">{trip.route}</td>
+                      <td className="px-6 py-4 font-semibold text-gray-800 text-sm">{trip.route}</td>
                       <td className="px-6 py-4 text-gray-500 text-sm">{trip.truck}</td>
                       <td className="px-6 py-4 text-gray-500 text-sm">{trip.driver}</td>
                       <td className="px-6 py-4 text-gray-800 font-medium">{trip.freight}</td>
-                      <td className={`px-6 py-4 font-bold ${trip.profit.startsWith('+') ? 'text-green-600' : 'text-red-500'}`}>{trip.profit}</td>
+                      <td className={`px-6 py-4 font-bold ${trip.profit > 0 ? 'text-green-600' : 'text-red-500'}`}>{trip.profit}</td>
                       <td className="px-6 py-4">
                         <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${trip.status === 'Active' ? 'bg-blue-100 text-blue-600' : 'bg-green-100 text-green-600'}`}>
                           {trip.status}
@@ -190,7 +219,7 @@ useEffect(() => {
                   </div>
                   <div className="flex justify-between items-end">
                     <div className="text-xs text-gray-400">Freight: {trip.freight}</div>
-                    <div className={`text-lg font-black ${trip.profit.startsWith('+') ? 'text-green-600' : 'text-red-500'}`}>
+                    <div className={`text-lg font-black ${trip.profit > 0 ? 'text-green-600' : 'text-red-500'}`}>
                       {trip.profit}
                     </div>
                   </div>
