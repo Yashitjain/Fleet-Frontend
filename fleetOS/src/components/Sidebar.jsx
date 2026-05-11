@@ -11,11 +11,11 @@ import {
 const sidebarItems = [
   { label: 'Dashboard', to: '/dashboard', icon: <LayoutDashboard size={20} /> },
   { label: 'Trips', to: '/allTrips', icon: <Truck size={20} /> },
-  { label: 'Vehicles', icon: <Truck size={20} className="rotate-180" /> },
-  { label: 'Drivers', icon: <Users size={20} /> },
-  { label: 'Owners', icon: <UserSquare2 size={20} /> },
-  { label: 'Reports', icon: <FileText size={20} /> },
-  { label: 'Settings', icon: <Settings size={20} /> },
+  { label: 'Vehicles', to: '/allVehicles', icon: <Truck size={20} className="rotate-180" /> },
+  { label: 'Drivers', to: '/allDrivers', icon: <Users size={20} /> },
+  { label: 'Owners', to: '/allOwners', icon: <UserSquare2 size={20} /> },
+  { label: 'Reports', to: '/reports', icon: <FileText size={20} /> },
+  { label: 'Settings', to: '/settings', icon: <Settings size={20} /> },
 ];
 
 const activeClass = 'bg-white/10 text-white border-l-4 border-orange-500 rounded-l-none';

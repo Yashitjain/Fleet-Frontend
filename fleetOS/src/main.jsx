@@ -10,6 +10,9 @@ import TripDetails from './components/TripDetails.jsx'
 import AddExpense from './components/AddExpense.jsx'
 import AllTrips from './components/AllTrips.jsx'
 import AddTrip from './components/AddTrip.jsx'
+import TruckList from './components/TruckList.jsx'
+import DriverList from './components/DriverList.jsx'
+import OwnerList from './components/OwnerList.jsx'
 createRoot(document.getElementById('root')).render(
  
     <BrowserRouter>
@@ -21,6 +24,10 @@ createRoot(document.getElementById('root')).render(
         <Route path="/trip/:tripId/add-expense" element = {<AddExpense  />} />
         <Route path="/allTrips" element = {<AllTrips  />} />
         <Route path="/create-trip" element = {<AddTrip  />} />
+        <Route path="/allVehicles" element = {<TruckList  />} />
+        <Route path="/allDrivers" element = {<DriverList  />} />
+        <Route path="/allOwners" element = {<OwnerList  />} />
+
 
       </Routes>
     </BrowserRouter>
