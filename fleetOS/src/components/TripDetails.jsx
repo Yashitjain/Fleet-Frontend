@@ -26,6 +26,9 @@ const TripDetails = () => {
   const [expenses, setExpenses] = useState([]);
 
   useEffect(() => {
+    if (!tripId || tripId === 'undefined' || tripId === '') {
+        return; // Exit quietly. Do NOT navigate, just stop the function.
+    }
 
     const fetchTripDetails = async (id) => {
         try{
@@ -92,7 +95,7 @@ const navigate = useNavigate();
         {/* Header Area */}
         <header className="bg-white md:bg-transparent p-4 md:p-8 flex justify-between items-center">
           <div>
-            <button className="flex items-center text-gray-500 text-sm mb-1 hover:text-gray-800 transition-colors">
+            <button onClick={() => navigate(-1)} className="flex items-center text-gray-500 text-sm mb-1 hover:text-gray-800 transition-colors">
               <ArrowLeft size={16} className="mr-1" /> Wapas / #{trip.id}
             </button>
             <div className="flex items-center gap-3">

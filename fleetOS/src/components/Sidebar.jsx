@@ -10,7 +10,7 @@ import {
 
 const sidebarItems = [
   { label: 'Dashboard', to: '/dashboard', icon: <LayoutDashboard size={20} /> },
-  { label: 'Trips', icon: <Truck size={20} /> },
+  { label: 'Trips', to: '/allTrips', icon: <Truck size={20} /> },
   { label: 'Vehicles', icon: <Truck size={20} className="rotate-180" /> },
   { label: 'Drivers', icon: <Users size={20} /> },
   { label: 'Owners', icon: <UserSquare2 size={20} /> },
