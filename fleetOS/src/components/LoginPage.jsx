@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ArrowRight, Truck, Star } from 'lucide-react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import api from '../service/api'; // Import the configured axios instance
 
 const LoginPage = () => {
   const navigate = useNavigate(); // 1. Move navigate to the top level of the component
@@ -23,7 +24,7 @@ const LoginPage = () => {
         password: forsmata.password, // 3. Fixed: was formData, now forsmata
       };
 
-      const response = await axios.post('http://localhost:8080/api/v1/auth/login', loginData);
+      const response = await api.post('/auth/login', loginData);
 
       console.log("Response received:", response.status);
 

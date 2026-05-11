@@ -6,6 +6,7 @@ import { BowArrow } from 'lucide-react'
 import FleetOSLogin from './components/LoginPage.jsx'
 import Dashboard from './components/DashBoard.jsx'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import TripDetails from './components/TripDetails.jsx'
 createRoot(document.getElementById('root')).render(
  
     <BrowserRouter>
@@ -13,6 +14,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/login" element={<FleetOSLogin />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/trip/:tripId" element = {<TripDetails  />} />
       </Routes>
     </BrowserRouter>
 )

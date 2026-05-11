@@ -64,20 +64,23 @@ useEffect(() => {
 
   const fetchTripDetails = async () => {
     try {
-      const response = await api.get(`/trip/`);
-      console.log("Trip details:", response.data);
-      setTripDetails(response.data); // Update state with trip details
+        const response = await api.get(`/trip/`);
+        console.log("Trip details:", response.data);
+        setTripDetails(response.data); // Update state with trip details
     } catch (err) {
-      console.error("Failed to fetch trip details:", err.response?.data || err.message);
+        console.error("Failed to fetch trip details:", err.response?.data || err.message);
     }
- };
+  };
 
-  verifyToken();
-  fetchDashboardData();
-  fetchTripDetails(); // You can pass a specific tripId if needed   
+    verifyToken();
+    fetchDashboardData();
+    fetchTripDetails(); // You can pass a specific tripId if needed   
 
-}, []);
+    }, []);
 
+    const handleTripDetail = (tripId) => {
+        navigate(`/trip/${tripId}`); // Example: navigate to trip details page for trip with ID 1
+    }
     // If not validated yet, show nothing or a spinner
     if (!isValidated) return <div className="bg-[#0f172a] min-h-screen text-white p-10">Verifying session...</div>;
 
@@ -90,6 +93,7 @@ useEffect(() => {
 
     const recentTrips = Array.isArray(tripDetails) 
         ? tripDetails.map(trip => ({
+            id:trip.id,
             route: `${trip.source} → ${trip.destination}`,
             truck: trip.vehicleNumber,
             driver: trip.driverName,
@@ -163,7 +167,7 @@ useEffect(() => {
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             <div className="p-6 border-b border-gray-50 flex justify-between items-center">
               <h3 className="font-bold text-gray-800 text-lg">Recent Trips</h3>
-              <button className="text-blue-600 text-sm font-semibold hover:underline">Sab dekho</button>
+              <button className="text-blue-600 text-sm font-semibold hover:underline" >Sab dekho</button>
             </div>
 
             {/* Desktop Table View */}
@@ -194,7 +198,9 @@ useEffect(() => {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        <button className="bg-[#0f172a] text-white px-4 py-1.5 rounded-lg text-xs font-bold">Dekho</button>
+                        <button className="bg-[#0f172a] text-white px-4 py-1.5 rounded-lg text-xs font-bold" onClick={() => handleTripDetail(trip.id)}>
+                          Dekho
+                        </button>
                       </td>
                     </tr>
                   ))}
@@ -203,29 +209,36 @@ useEffect(() => {
             </div>
 
             {/* Mobile List View */}
-            <div className="md:hidden divide-y divide-gray-100">
-              {recentTrips.map((trip, idx) => (
-                <div key={idx} className="p-4 space-y-3">
-                  <div className="flex justify-between items-start">
+            <div className="md:hidden space-y-4 px-4 py-2">
+                {recentTrips.map((trip) => (
+                    <div key={trip.id} className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+                    <div className="flex justify-between items-start mb-3">
+                        <div>
+                        <h4 className="font-bold text-gray-900">{trip.route}</h4>
+                        <p className="text-xs text-gray-500">{trip.truck} • {trip.driver}</p>
+                        </div>
+                        <span className="bg-blue-100 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
+                        Active
+                        </span>
+                    </div>
+      
+                <div className="flex justify-between items-center mt-4">
                     <div>
-                      <p className="font-bold text-gray-800">{trip.route}</p>
-                      <div className="flex items-center gap-2 text-[10px] text-gray-400 mt-1">
-                        <Truck size={12} /> {trip.truck} | <Users size={12} /> {trip.driver}
-                      </div>
+                    <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Freight</p>
+                    <p className="font-bold text-gray-900">₹{trip.freight.toLocaleString('en-IN')}</p>
                     </div>
-                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${trip.status === 'Active' ? 'bg-blue-100 text-blue-600' : 'bg-green-100 text-green-600'}`}>
-                      {trip.status}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-end">
-                    <div className="text-xs text-gray-400">Freight: {trip.freight}</div>
-                    <div className={`text-lg font-black ${trip.profit > 0 ? 'text-green-600' : 'text-red-500'}`}>
-                      {trip.profit}
-                    </div>
-                  </div>
+                    
+                    {/* THE MOBILE DEKHO BUTTON */}
+                    <button 
+                    onClick={() => navigate(`/trip/${trip.id}`)}
+                    className="bg-[#0f172a] text-white px-6 py-2 rounded-lg text-sm font-bold flex items-center gap-2 active:scale-95 transition-transform"
+                    >
+                    Dekho
+                    </button>
                 </div>
-              ))}
-            </div>
+                </div>
+  ))}
+</div>
           </div>
         </div>
       </main>
