@@ -9,6 +9,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import TripDetails from './components/TripDetails.jsx'
 import AddExpense from './components/AddExpense.jsx'
 import AllTrips from './components/AllTrips.jsx'
+import AddTrip from './components/AddTrip.jsx'
 createRoot(document.getElementById('root')).render(
  
     <BrowserRouter>
@@ -19,6 +20,8 @@ createRoot(document.getElementById('root')).render(
         <Route path="/trip/:tripId" element = {<TripDetails  />} />
         <Route path="/trip/:tripId/add-expense" element = {<AddExpense  />} />
         <Route path="/allTrips" element = {<AllTrips  />} />
+        <Route path="/create-trip" element = {<AddTrip  />} />
+
       </Routes>
     </BrowserRouter>
 )

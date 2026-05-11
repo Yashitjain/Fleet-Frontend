@@ -54,7 +54,7 @@ useEffect(() => {
 
   const fetchDashboardData = async () => {
     try {
-      const response = await api.get('/user/balance');
+      const response = await api.get('/user/dashboard');
       const responsedata = response.data;
       setDashboardData(responsedata); // ✅ update state with fetched data
       console.log("Dashboard data:", response.data); // ✅ log the fetched data
@@ -87,10 +87,12 @@ useEffect(() => {
 
     const stats = [
     { label: 'TOTAL TRIPS', value: dashboardData.totalTrips || 0, icon: <Truck className="text-gray-400" />, color: 'text-gray-800' },
-    { label: 'ACTIVE TRIPS', value: dashboardData.activeTrips || 0, icon: <RotateCcw className="text-blue-500" />, color: 'text-gray-800' },
+    { label: 'ACTIVE TRIPS', value: dashboardData.totalActiveTrips || 0, icon: <RotateCcw className="text-blue-500"  />, color: 'text-gray-800' },
     { label: 'TOTAL FREIGHT', value: dashboardData.totalFreightEarned || 0, icon: <TrendingUp className="text-orange-500" />, color: 'text-gray-800' },
-    { label: 'NET PROFIT', value: dashboardData.profit || 0, icon: <Package className="text-green-500" />, color: 'text-green-600' },
-  ];
+    { label: 'COMPLETE TRIPS KA PROFIT', value: dashboardData.bookedProfit || 0, icon: <Package className="text-green-500" />, color: 'text-green-600' },
+    { label: 'CHALTI TRIPS KA PROFIT', value: dashboardData.estimatedProfit || 0, icon: <Package className="text-gray-500" />, color: 'text-gray-600' },
+    
+];
 
     const recentTrips = Array.isArray(tripDetails) 
         ? tripDetails.map(trip => ({
@@ -125,7 +127,9 @@ useEffect(() => {
             <p className="text-sm text-gray-400 md:hidden">May 2026 ka overview</p>
           </div>
           <div className="flex items-center gap-3">
-            <button className="hidden md:flex items-center gap-2 bg-[#0f172a] text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-slate-800 transition-all">
+            <button className="hidden md:flex items-center gap-2 bg-[#0f172a] text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-slate-800 transition-all"
+                onClick={() => navigate('/create-trip')}
+            >
               <Plus size={18} /> Nayi Trip
             </button>
             <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold border-2 border-white/20">
@@ -137,7 +141,7 @@ useEffect(() => {
         <div className="p-4 md:p-8 space-y-8">
           
           {/* METRIC CARDS */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
             {stats.map((stat, idx) => (
               <div key={idx} className="bg-white p-4 md:p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between min-h-[120px] md:min-h-[140px]">
                 <div className="flex flex-col gap-1">
@@ -179,7 +183,7 @@ useEffect(() => {
                       <td className="px-6 py-4 text-gray-500 text-sm">{trip.truck}</td>
                       <td className="px-6 py-4 text-gray-500 text-sm">{trip.driver}</td>
                       <td className="px-6 py-4 text-gray-800 font-medium">{trip.freight}</td>
-                      <td className={`px-6 py-4 font-bold ${trip.profit > 0 ? 'text-green-600' : 'text-red-500'}`}>{trip.profit}</td>
+                      <td className={`px-6 py-4 font-bold ${trip.status === 'Active' ? "text-gray-500" : trip.profit >= 0 ? 'text-green-600' : 'text-red-500'}`}>{trip.profit}</td>
                       <td className="px-6 py-4">
                         <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${trip.status === 'Active' ? 'bg-blue-100 text-blue-600' : 'bg-green-100 text-green-600'}`}>
                           {trip.status}

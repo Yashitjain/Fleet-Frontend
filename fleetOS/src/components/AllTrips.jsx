@@ -62,7 +62,7 @@ const AllTrips = () => {
               <p className="text-gray-500 text-sm">Apne poore fleet ki history dekhein</p>
             </div>
             <button 
-              onClick={() => navigate('/add-trip')}
+              onClick={() => navigate('/create-trip')}
               className="bg-[#0f172a] text-white px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg active:scale-95 transition-all"
             >
               <Plus size={20} /> Naya Trip Shuru Karo
