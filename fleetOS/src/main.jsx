@@ -10,11 +10,12 @@ import TripDetails from './components/TripDetails.jsx'
 import AddExpense from './components/AddExpense.jsx'
 import AllTrips from './components/AllTrips.jsx'
 import AddTrip from './components/AddTrip.jsx'
-import VehicleList from './components/AllVehicle.jsx'
-import DriverList from './components/AllDriver.jsx'
-import OwnerList from './components/OwnerList.jsx'
+import VehicleList from './components/AllVehicles.jsx'
+import DriverList from './components/AllDrivers.jsx'
+import OwnerList from './components/AllOwners.jsx'
 import AddVehicle from './components/AddVehicle.jsx'
 import AddDriver from './components/AddDriver.jsx'
+import AddOwner from './components/AddOwner.jsx'
 createRoot(document.getElementById('root')).render(
  
     <BrowserRouter>
@@ -31,6 +32,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/allOwners" element = {<OwnerList  />} />
         <Route path="/addVehicle" element = {<AddVehicle  />} />
         <Route path="/addDriver" element = {<AddDriver  />} />
+        <Route path="/addOwner" element = {<AddOwner  />} />
 
       </Routes>
     </BrowserRouter>
