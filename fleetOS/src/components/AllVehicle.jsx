@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../service/api';
 import Sidebar from './Sidebar';
 
-const TruckList = () => {
+const VehicleList = () => {
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ const TruckList = () => {
             <ArrowLeft size={16} className="mr-1" /> Wapas
         </button>
         <h1 className="text-2xl font-black flex items-center gap-2">Trucks 🚛</h1>
-        <button className="bg-orange-500 text-white px-4 py-1.5 rounded-lg text-xs font-bold shadow-lg">+ Add</button>
+        <button className="bg-orange-500 text-white px-4 py-1.5 rounded-lg text-xs font-bold shadow-lg" onClick={() => navigate('/addVehicle')}>+ Add</button>
       </header>
 
       <div className="flex-1 bg-white rounded-t-[40px] p-6 min-h-[80vh]">
@@ -53,4 +53,4 @@ const TruckList = () => {
   );
 };
 
-export default TruckList;
+export default VehicleList;

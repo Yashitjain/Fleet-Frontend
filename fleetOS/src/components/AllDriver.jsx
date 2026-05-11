@@ -25,7 +25,7 @@ const DriverList = () => {
             <ArrowLeft size={16} className="mr-1" /> Wapas
         </button>
         <h1 className="text-2xl font-black flex items-center gap-2">Drivers 👤</h1>
-        <button className="bg-orange-500 text-white px-4 py-1.5 rounded-lg text-xs font-bold">+ Add</button>
+        <button className="bg-orange-500 text-white px-4 py-1.5 rounded-lg text-xs font-bold" onClick = {() => navigate('/addDriver')}>+ Add</button>
       </header>
 
       <div className="flex-1 bg-white rounded-t-[40px] p-6 min-h-[80vh]">
