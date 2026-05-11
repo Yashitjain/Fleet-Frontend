@@ -47,8 +47,8 @@ const navigate = useNavigate();
     navigate(`/trip/${tripId}/add-expense`);
   }
 
-  const handleCompleteTrip = (tripId) => {
-    navigate(`/trip/${tripId}/complete`);
+  const handleCompleteTrip = async (tripId) => {
+    const response = await api.patch(`/trip/status/${tripId}/close`)
   };
 
 
@@ -110,10 +110,14 @@ const navigate = useNavigate();
             </div>
           </div>
           <div className="hidden md:flex gap-3">
-            <button className="bg-white border border-gray-200 px-4 py-2 rounded-lg font-medium flex items-center gap-2 hover:bg-gray-50" onClick = {() => handleAddExpense(tripId)}>+ Kharcha Add Karo</button>
-            <button className="bg-[#0f172a] text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 hover:bg-black" onClick={() => handleCompleteTrip(tripId)}>
-              <CheckCircle2 size={18} /> Trip Khatam Karo
-            </button>
+            {trip.status === 'Active' ? 
+            <div>
+                <button className="bg-white border border-gray-200 px-4 py-2 rounded-lg font-medium flex items-center gap-2 hover:bg-gray-50" onClick = {() => handleAddExpense(tripId) }>+ Kharcha Add Karo</button> 
+                <button className={`bg-[#0f172a] ${trip.status === 'Active' ? 'hover:bg-gray-50' : 'bg-green-600'} text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 hover:bg-black`} onClick={ trip.status === 'Active' ? () => handleCompleteTrip(tripId) : undefined} >
+                <CheckCircle2 size={18} /> Trip Khatam Karo
+                </button>
+            </div>
+            : null}
           </div>
         </header>
 
@@ -152,9 +156,11 @@ const navigate = useNavigate();
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 min-h-[400px]">
               <div className="p-6 flex justify-between items-center border-b border-gray-50">
                 <h3 className="font-bold text-gray-900 text-lg">Kharche ki List</h3>
-                <button className="bg-[#0f172a] text-white text-xs font-bold px-3 py-2 rounded-md" onClick={() => handleAddExpense(tripId)}>
-                  + Kharcha
-                </button>
+                {trip.status === 'Active' ? 
+                  <button className="bg-[#0f172a] text-white text-xs font-bold px-3 py-2 rounded-md" onClick={() => handleAddExpense(tripId)}>
+                    + Kharcha
+                  </button>
+                : null}
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left">

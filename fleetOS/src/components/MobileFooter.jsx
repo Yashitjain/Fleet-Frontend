@@ -5,7 +5,7 @@ import { Home, Truck, Users, UserSquare2, Plus, CheckCircle2 } from 'lucide-reac
 const tabs = [
   { label: 'Home', path: '/dashboard', icon: <Home size={20} /> },
   { label: 'Trips', path: '/allTrips', icon: <Truck size={20} /> },
-  { label: 'Owners', path: '/owners', icon: <Users size={20} /> },
+  { label: 'Owners', path: '/allOwners', icon: <Users size={20} /> },
   { label: 'Profile', path: '/profile', icon: <UserSquare2 size={20} /> },
 ];
 

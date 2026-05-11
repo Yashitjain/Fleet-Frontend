@@ -3,6 +3,7 @@ import { Search, Plus, Crown, ArrowRight, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import api from '../service/api';
 import Sidebar from './Sidebar';
+import MobileFooter from './MobileFooter';
 
 const OwnerList = () => {
   const [owners, setOwners] = useState([]);
@@ -10,10 +11,19 @@ const OwnerList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    api.get('/owner/')
-      .then(res => setOwners(res.data))
-      .catch(err => console.error("Owners load failed"))
-      .finally(() => setLoading(false));
+    const loadOwners = async () => {
+      try {
+        const response = await api.get('/owner/');
+        setOwners(response.data);
+        console.log("Owners loaded:", response.data);
+      } catch (error) {
+        console.error("Owners load failed", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadOwners();
   }, []);
 
   return (
@@ -48,7 +58,8 @@ const OwnerList = () => {
                     </span>
                   </div>
                 </div>
-                <button className="flex items-center gap-1 text-[10px] font-black text-blue-600 bg-blue-50 px-3 py-2 rounded-xl active:scale-95 transition-all">
+                <button className="flex items-center gap-1 text-[10px] font-black text-blue-600 bg-blue-50 px-3 py-2 rounded-xl active:scale-95 transition-all"
+                  onClick={()=>navigate(`/owner/balance-sheet/${o.ownerId}`)}> 
                   Balance <ArrowRight size={12} />
                 </button>
               </div>
@@ -57,6 +68,7 @@ const OwnerList = () => {
         }
         </div>
     </div>
+    <MobileFooter />
     </div>
   );
 };

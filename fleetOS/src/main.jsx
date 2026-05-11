@@ -16,6 +16,7 @@ import OwnerList from './components/AllOwners.jsx'
 import AddVehicle from './components/AddVehicle.jsx'
 import AddDriver from './components/AddDriver.jsx'
 import AddOwner from './components/AddOwner.jsx'
+import OwnerBalanceSheet from './components/OwnerBalanceSheet.jsx'
 createRoot(document.getElementById('root')).render(
  
     <BrowserRouter>
@@ -33,6 +34,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/addVehicle" element = {<AddVehicle  />} />
         <Route path="/addDriver" element = {<AddDriver  />} />
         <Route path="/addOwner" element = {<AddOwner  />} />
+        <Route path="/owner/balance-sheet/:ownerId" element = {<OwnerBalanceSheet  />} />
 
       </Routes>
     </BrowserRouter>
