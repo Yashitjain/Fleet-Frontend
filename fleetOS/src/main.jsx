@@ -7,6 +7,7 @@ import FleetOSLogin from './components/LoginPage.jsx'
 import Dashboard from './components/DashBoard.jsx'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import TripDetails from './components/TripDetails.jsx'
+import AddExpense from './components/AddExpense.jsx'
 createRoot(document.getElementById('root')).render(
  
     <BrowserRouter>
@@ -15,6 +16,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/trip/:tripId" element = {<TripDetails  />} />
+        <Route path="/trip/:tripId/add-expense" element = {<AddExpense  />} />
       </Routes>
     </BrowserRouter>
 )

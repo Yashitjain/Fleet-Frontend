@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios'
 import api from '../service/api'; // Import the configured axios instance
+import Sidebar from './Sidebar';
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -109,22 +110,7 @@ useEffect(() => {
     <div className="min-h-screen bg-[#f8fafc] flex flex-col md:flex-row pb-20 md:pb-0">
       
       {/* DESKTOP SIDEBAR */}
-      <aside className="hidden md:flex w-64 bg-[#0f172a] flex-col text-gray-400">
-        <div className="p-6">
-          <h1 className="text-2xl font-black text-white tracking-tight">
-            FLEET<span className="text-orange-500">OS</span>
-          </h1>
-        </div>
-        <nav className="flex-1 px-4 space-y-2 mt-4">
-          <NavItem icon={<LayoutDashboard size={20}/>} label="Dashboard" active />
-          <NavItem icon={<Truck size={20}/>} label="Trips" />
-          <NavItem icon={<Truck size={20} className="rotate-180"/>} label="Vehicles" />
-          <NavItem icon={<UserSquare2 size={20}/>} label="Drivers" />
-          <NavItem icon={<Users size={20}/>} label="Owners" />
-          <NavItem icon={<FileText size={20}/>} label="Reports" />
-          <NavItem icon={<Settings size={20}/>} label="Settings" />
-        </nav>
-      </aside>
+      <Sidebar />
 
       {/* MAIN CONTENT AREA */}
       <main className="flex-1 overflow-y-auto">
@@ -255,13 +241,6 @@ useEffect(() => {
 };
 
 // Helper Components
-const NavItem = ({ icon, label, active = false }) => (
-  <div className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-all ${active ? 'bg-white/10 text-white border-l-4 border-orange-500 rounded-l-none' : 'hover:bg-white/5'}`}>
-    {icon}
-    <span className="font-medium text-sm">{label}</span>
-  </div>
-);
-
 const MobileTab = ({ icon, label, active = false }) => (
   <div className={`flex flex-col items-center gap-1 ${active ? 'text-[#0f172a]' : 'text-gray-400'}`}>
     {icon}

@@ -13,10 +13,11 @@ import {
   History,
   Receipt
 } from 'lucide-react';
-import { NavLink, useNavigate, useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect} from 'react';
 
 import api from '../service/api'; // Import the configured axios instance
+import Sidebar from './Sidebar';
 
 const TripDetails = () => {
   const { tripId } = useParams();
@@ -40,8 +41,11 @@ const TripDetails = () => {
     fetchTripDetails(tripId);
   },[]
 )
-
-  
+    
+const navigate = useNavigate();
+  const handleAddExpense = (tripId) => {
+    navigate(`/trip/${tripId}/add-expense`);
+  }
 
   const kharche = expenses.map(exp => {
   // 1. Define UI properties based on expenseType
@@ -76,38 +80,11 @@ const TripDetails = () => {
     };
     });
 
-    const NavItem = ({ icon, label, active, to }) => {
-  const navigate = useNavigate();
-
-  return (
-    <div 
-      onClick={() => to && navigate(to)} // Navigate if "to" prop exists
-      className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-all ${
-        active 
-          ? 'bg-blue-600 text-white shadow-lg shadow-blue-900' 
-          : 'hover:bg-white/5 text-gray-400 hover:text-white'
-      }`}
-    >
-      {icon} 
-      <span className="font-medium">{label}</span>
-    </div>
-  );
-};
-
   return (
     <div className="min-h-screen bg-[#f1f5f9] flex flex-col md:flex-row">
       
       {/* DESKTOP SIDEBAR */}
-      <aside className="hidden md:flex w-64 bg-[#1e293b] flex-col text-gray-400 p-4">
-        <h1 className="text-2xl font-black text-white mb-8 px-2">FLEET<span className="text-orange-500">OS</span></h1>
-        <nav className="space-y-2">
-          <NavItem icon={<LayoutDashboard size={20} />} label="Dashboard" to="/dashboard" />
-          <NavItem icon={<Truck size={20} />} label="Trips" active />
-          <NavItem icon={<History size={20} />} label="Vehicles" />
-          <NavItem icon={<Users size={20} />} label="Drivers" />
-          <NavItem icon={<UserSquare2 size={20} />} label="Owners" />
-        </nav>
-      </aside>
+      <Sidebar />
 
       {/* MAIN CONTENT */}
       <main className="flex-1 pb-24 md:pb-8 overflow-y-auto">
@@ -128,7 +105,7 @@ const TripDetails = () => {
             </div>
           </div>
           <div className="hidden md:flex gap-3">
-            <button className="bg-white border border-gray-200 px-4 py-2 rounded-lg font-medium flex items-center gap-2 hover:bg-gray-50">+ Kharcha Add Karo</button>
+            <button className="bg-white border border-gray-200 px-4 py-2 rounded-lg font-medium flex items-center gap-2 hover:bg-gray-50" onClick = {() => handleAddExpense(tripId)}>+ Kharcha Add Karo</button>
             <button className="bg-[#0f172a] text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 hover:bg-black">
               <CheckCircle2 size={18} /> Trip Khatam Karo
             </button>
@@ -170,7 +147,9 @@ const TripDetails = () => {
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 min-h-[400px]">
               <div className="p-6 flex justify-between items-center border-b border-gray-50">
                 <h3 className="font-bold text-gray-900 text-lg">Kharche ki List</h3>
-                <button className="bg-[#0f172a] text-white text-xs font-bold px-3 py-2 rounded-md">+ Kharcha</button>
+                <button className="bg-[#0f172a] text-white text-xs font-bold px-3 py-2 rounded-md" onClick={() => handleAddExpense(tripId)}>
+                  + Kharcha
+                </button>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left">
@@ -209,7 +188,7 @@ const TripDetails = () => {
 
       {/* MOBILE ACTION BUTTONS (Fixed at bottom) */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 flex gap-3 z-50">
-        <button className="flex-1 bg-white border border-gray-200 py-4 rounded-xl font-bold flex items-center justify-center gap-2">
+        <button className="flex-1 bg-white border border-gray-200 py-4 rounded-xl font-bold flex items-center justify-center gap-2" onClick = {() => handleAddExpense(tripId)}>
           <Plus size={18} /> Kharcha
         </button>
         <button className="flex-[1.5] bg-green-600 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-green-200">
