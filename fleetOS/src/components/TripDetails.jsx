@@ -7,10 +7,6 @@ import {
   Wrench, 
   Plus, 
   CheckCircle2, 
-  LayoutDashboard, 
-  Users, 
-  UserSquare2, 
-  History,
   Receipt
 } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -18,6 +14,7 @@ import { useEffect} from 'react';
 
 import api from '../service/api'; // Import the configured axios instance
 import Sidebar from './Sidebar';
+import MobileFooter from './MobileFooter';
 
 const TripDetails = () => {
   const { tripId } = useParams();
@@ -49,6 +46,11 @@ const navigate = useNavigate();
   const handleAddExpense = (tripId) => {
     navigate(`/trip/${tripId}/add-expense`);
   }
+
+  const handleCompleteTrip = (tripId) => {
+    navigate(`/trip/${tripId}/complete`);
+  };
+
 
   const kharche = expenses.map(exp => {
   // 1. Define UI properties based on expenseType
@@ -109,7 +111,7 @@ const navigate = useNavigate();
           </div>
           <div className="hidden md:flex gap-3">
             <button className="bg-white border border-gray-200 px-4 py-2 rounded-lg font-medium flex items-center gap-2 hover:bg-gray-50" onClick = {() => handleAddExpense(tripId)}>+ Kharcha Add Karo</button>
-            <button className="bg-[#0f172a] text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 hover:bg-black">
+            <button className="bg-[#0f172a] text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 hover:bg-black" onClick={() => handleCompleteTrip(tripId)}>
               <CheckCircle2 size={18} /> Trip Khatam Karo
             </button>
           </div>
@@ -189,25 +191,11 @@ const navigate = useNavigate();
         </div>
       </main>
 
-      {/* MOBILE ACTION BUTTONS (Fixed at bottom) */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 flex gap-3 z-50">
-        <button className="flex-1 bg-white border border-gray-200 py-4 rounded-xl font-bold flex items-center justify-center gap-2" onClick = {() => handleAddExpense(tripId)}>
-          <Plus size={18} /> Kharcha
-        </button>
-        <button className="flex-[1.5] bg-green-600 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-green-200">
-          <CheckCircle2 size={18} /> Trip Khatam
-        </button>
-      </div>
+      {/* MOBILE ACTION FOOTER */}
+      <MobileFooter activeTab="Trips" tripId={tripId} />
     </div>
   );
 };
-
-// Helper Components
-const NavItem = ({ icon, label, active }) => (
-  <div className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-all ${active ? 'bg-blue-600 text-white shadow-lg shadow-blue-900' : 'hover:bg-white/5'}`}>
-    {icon} <span className="font-medium">{label}</span>
-  </div>
-);
 
 const HisaabRow = ({ label, amount, isNegative }) => (
   <div className="flex justify-between items-center text-sm">

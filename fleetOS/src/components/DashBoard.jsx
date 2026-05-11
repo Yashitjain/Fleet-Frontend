@@ -10,14 +10,14 @@ import {
   ChevronRight,
   TrendingUp,
   Package,
-  RotateCcw,
-  Home
+  RotateCcw
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios'
 import api from '../service/api'; // Import the configured axios instance
 import Sidebar from './Sidebar';
+import MobileFooter from './MobileFooter';
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -153,7 +153,9 @@ useEffect(() => {
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             <div className="p-6 border-b border-gray-50 flex justify-between items-center">
               <h3 className="font-bold text-gray-800 text-lg">Recent Trips</h3>
-              <button className="text-blue-600 text-sm font-semibold hover:underline" >Sab dekho</button>
+              <button className="text-blue-600 text-sm font-semibold hover:underline" onClick={() => navigate('/allTrips')}>
+                Sab dekho
+              </button>
             </div>
 
             {/* Desktop Table View */}
@@ -230,22 +232,9 @@ useEffect(() => {
       </main>
 
       {/* MOBILE BOTTOM NAV */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 flex justify-around py-3 px-2 shadow-lg z-50">
-        <MobileTab icon={<Home size={20}/>} label="Home" active />
-        <MobileTab icon={<Truck size={20}/>} label="Trips" />
-        <MobileTab icon={<Users size={20}/>} label="Owners" />
-        <MobileTab icon={<UserSquare2 size={20}/>} label="Profile" />
-      </div>
+      <MobileFooter activeTab="Home" />
     </div>
   );
 };
-
-// Helper Components
-const MobileTab = ({ icon, label, active = false }) => (
-  <div className={`flex flex-col items-center gap-1 ${active ? 'text-[#0f172a]' : 'text-gray-400'}`}>
-    {icon}
-    <span className="text-[10px] font-bold">{label}</span>
-  </div>
-);
 
 export default Dashboard;

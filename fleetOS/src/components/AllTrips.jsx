@@ -9,10 +9,11 @@ import {
   ChevronRight, 
   Plus, 
   ArrowUpRight, 
-//   Sidebar
+  ArrowLeft
 } from 'lucide-react';
 import api from '../service/api';
 import Sidebar from './Sidebar';
+import MobileFooter from './MobileFooter';
 
 const AllTrips = () => {
   const navigate = useNavigate();
@@ -54,6 +55,9 @@ const AllTrips = () => {
         <header className="p-4 md:p-8 bg-white border-b border-gray-100 md:bg-transparent md:border-none">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
+              <button onClick={() => navigate(-1)} className="flex items-center text-gray-500 text-sm mb-1 hover:text-gray-800 transition-colors">
+                <ArrowLeft size={16} className="mr-1" /> Wapas
+              </button>
               <h1 className="text-2xl md:text-3xl font-black text-[#0f172a]">Saare Trips</h1>
               <p className="text-gray-500 text-sm">Apne poore fleet ki history dekhein</p>
             </div>
@@ -181,6 +185,7 @@ const AllTrips = () => {
           )}
         </div>
       </div>
+      <MobileFooter activeTab="Trips" />
     </div>
   );
 };
