@@ -5,6 +5,7 @@ import {
   TrendingUpIcon
 } from 'lucide-react';
 import api from '../service/api'; // Your Axios instance
+import Sidebar from './Sidebar';
 
 const AddExpense = () => {
   const navigate = useNavigate();
@@ -39,8 +40,7 @@ const AddExpense = () => {
 
   return (
     <div className="min-h-screen bg-[#0f172a] md:bg-[#f1f5f9] flex flex-col md:flex-row">
-      {/* Sidebar would be rendered here by your Layout wrapper */}
-
+      <Sidebar />
       <div className="flex-1 flex flex-col">
         {/* Header - Dark on Mobile, Light on Desktop */}
         <header className="p-6 text-white md:text-gray-800 bg-[#0f172a] md:bg-transparent">

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, Plus, Truck, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import api from '../service/api';
+import Sidebar from './Sidebar';
 
 const TruckList = () => {
   const [vehicles, setVehicles] = useState([]);
@@ -16,8 +17,10 @@ const TruckList = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0f172a] md:bg-[#f1f5f9] pb-20">
-      <header className="p-6 flex justify-between items-center text-white md:text-gray-900">
+    <div className="min-h-screen bg-[#0f172a] md:bg-[#f1f5f9] pb-20 flex flex-col md:flex-row">
+      <Sidebar />
+      <div className="flex-1">
+        <header className="p-6 flex justify-between items-center text-white md:text-gray-900">
         <button onClick={() => navigate(-1)} className="flex items-center text-gray-500 text-sm mb-1 hover:text-gray-800 transition-colors">
             <ArrowLeft size={16} className="mr-1" /> Wapas
         </button>
@@ -45,6 +48,7 @@ const TruckList = () => {
           </div>
         }
       </div>
+    </div>
     </div>
   );
 };

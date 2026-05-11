@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Truck, User, Banknote, Calendar, Plus } from 'lucide-react';
 import api from '../service/api';
+import Sidebar from './Sidebar';
 
 const AddTrip = () => {
   const navigate = useNavigate();
@@ -62,6 +63,7 @@ const AddTrip = () => {
 
   return (
     <div className="min-h-screen bg-[#0f172a] md:bg-[#f1f5f9] flex flex-col md:flex-row">
+      <Sidebar />
       <div className="flex-1 flex flex-col max-w-2xl mx-auto w-full">
         
         {/* Header */}
