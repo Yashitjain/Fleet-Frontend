@@ -97,6 +97,7 @@ const AllTrips = () => {
                   <th className="px-6 py-4">Tarik</th>
                   <th className="px-6 py-4">Status</th>
                   <th className="px-6 py-4">Freight</th>
+                  <th className="px-6 py-4">Profit</th>
                   <th className="px-6 py-4 text-right">Action</th>
                 </tr>
               </thead>
@@ -125,6 +126,9 @@ const AllTrips = () => {
                     <td className="px-6 py-4 font-bold text-gray-900">
                       ₹{trip.freightPrice?.toLocaleString('en-IN')}
                     </td>
+                    <td className="px-6 py-4 font-bold text-green-600">
+                      ₹{trip.profit?.toLocaleString('en-IN')}
+                    </td>
                     <td className="px-6 py-4 text-right">
                       <button 
                         onClick={() => navigate(`/trip/${trip.id}`)}
@@ -151,7 +155,10 @@ const AllTrips = () => {
                   <span className={`text-[9px] font-black px-2 py-0.5 rounded uppercase ${getStatusColor(trip.status)}`}>
                     {trip.status}
                   </span>
-                  <p className="font-black text-gray-900">₹{trip.freightPrice?.toLocaleString('en-IN')}</p>
+                  <div>
+                    <p className="font-black text-gray-900">₹{trip.freightPrice?.toLocaleString('en-IN')}</p>
+                    <p className="font-black text-green-600">₹{trip.profit?.toLocaleString('en-IN')}</p>
+                  </div>
                 </div>
                 
                 <div className="flex items-center gap-3 mb-4">
@@ -184,8 +191,9 @@ const AllTrips = () => {
             </div>
           )}
         </div>
+        <div className="h-10 md:hidden" aria-hidden="true" />
       </div>
-      <MobileFooter activeTab="Trips" />
+        <MobileFooter activeTab="Trips" />
     </div>
   );
 };

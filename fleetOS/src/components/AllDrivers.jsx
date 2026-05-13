@@ -45,9 +45,9 @@ const DriverList = () => {
                     <Phone size={10} /> {d.phone}
                   </p>
                 </div>
-                <span className="text-[9px] bg-gray-100 px-2 py-1 rounded font-black text-gray-500 uppercase">
+                {/* <span className="text-[9px] bg-gray-100 px-2 py-1 rounded font-black text-gray-500 uppercase">
                    {d.ownerName || 'Freelance'}
-                </span>
+                </span> */}
               </div>
             ))}
           </div>

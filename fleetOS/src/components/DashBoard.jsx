@@ -85,26 +85,31 @@ useEffect(() => {
     // If not validated yet, show nothing or a spinner
     if (!isValidated) return <div className="bg-[#0f172a] min-h-screen text-white p-10">Verifying session...</div>;
 
+    const formatAmount = (value) => {
+      if (value == null) return '₹0';
+      const absValue = Math.abs(value);
+      return `${value < 0 ? '- ' : ''}₹${absValue.toLocaleString('en-IN')}`;
+    };
+
     const stats = [
-    { label: 'TOTAL TRIPS', value: dashboardData.totalTrips || 0, icon: <Truck className="text-gray-400" />, color: 'text-gray-800' },
-    { label: 'ACTIVE TRIPS', value: dashboardData.totalActiveTrips || 0, icon: <RotateCcw className="text-blue-500"  />, color: 'text-gray-800' },
-    { label: 'TOTAL FREIGHT', value: dashboardData.totalFreightEarned || 0, icon: <TrendingUp className="text-orange-500" />, color: 'text-gray-800' },
-    { label: 'COMPLETE TRIPS KA PROFIT', value: dashboardData.bookedProfit || 0, icon: <Package className="text-green-500" />, color: 'text-green-600' },
-    { label: 'CHALTI TRIPS KA PROFIT', value: dashboardData.estimatedProfit || 0, icon: <Package className="text-gray-500" />, color: 'text-gray-600' },
-    
-];
+      { label: 'TOTAL TRIPS', value: dashboardData.totalTrips || 0, icon: <Truck className="text-gray-400" />, color: 'text-gray-800' },
+      { label: 'ACTIVE TRIPS', value: dashboardData.totalActiveTrips || 0, icon: <RotateCcw className="text-blue-500"  />, color: 'text-gray-800' },
+      { label: 'TOTAL FREIGHT', value: dashboardData.totalFreightEarned || 0, icon: <TrendingUp className="text-orange-500" />, color: 'text-gray-800', isCurrency: true },
+      { label: 'COMPLETE TRIPS KA PROFIT', value: dashboardData.bookedProfit || 0, icon: <Package className="text-green-500" />, color: 'text-green-600', isCurrency: true },
+      { label: 'CHALTI TRIPS KA PROFIT', value: dashboardData.estimatedProfit || 0, icon: <Package className="text-gray-500" />, color: 'text-gray-600', isCurrency: true },
+    ];
 
     const recentTrips = Array.isArray(tripDetails) 
-        ? tripDetails.map(trip => ({
-            id:trip.id,
-            route: `${trip.source} → ${trip.destination}`,
-            truck: trip.vehicleNumber,
-            driver: trip.driverName,
-            freight: trip.freightPrice,
-            profit: trip.profit,
-            status: trip.status === 'ACTIVE' ? 'Active' : 'Completed',
-            }))
-        : []; // Fallback to empty array if data isn't ready
+      ? tripDetails.map(trip => ({
+          id: trip.id,
+          route: `${trip.source} → ${trip.destination}`,
+          truck: trip.vehicleNumber,
+          driver: trip.driverName,
+          freight: trip.freightPrice,
+          profit: trip.profit,
+          status: trip.status === 'ACTIVE' ? 'Active' : 'Completed',
+        }))
+      : []; // Fallback to empty array if data isn't ready
 
   return (
     
@@ -148,7 +153,9 @@ useEffect(() => {
                   <div className="p-1 rounded-md mb-1">{stat.icon}</div>
                   <span className="text-[10px] md:text-xs font-bold text-gray-400 tracking-wider uppercase">{stat.label}</span>
                 </div>
-                <span className={`text-2xl md:text-3xl font-black ${stat.color}`}>{stat.value}</span>
+                <span className={`text-2xl md:text-3xl font-black ${stat.color}`}>
+                  {stat.isCurrency ? formatAmount(stat.value) : stat.value}
+                </span>
               </div>
             ))}
           </div>
@@ -182,8 +189,8 @@ useEffect(() => {
                       <td className="px-6 py-4 font-semibold text-gray-800 text-sm">{trip.route}</td>
                       <td className="px-6 py-4 text-gray-500 text-sm">{trip.truck}</td>
                       <td className="px-6 py-4 text-gray-500 text-sm">{trip.driver}</td>
-                      <td className="px-6 py-4 text-gray-800 font-medium">{trip.freight}</td>
-                      <td className={`px-6 py-4 font-bold ${trip.status === 'Active' ? "text-gray-500" : trip.profit >= 0 ? 'text-green-600' : 'text-red-500'}`}>{trip.profit}</td>
+                      <td className="px-6 py-4 text-gray-800 font-medium">{formatAmount(trip.freight)}</td>
+                      <td className={`px-6 py-4 font-bold ${trip.status === 'Active' ? "text-gray-500" : trip.profit >= 0 ? 'text-green-600' : 'text-red-500'}`}>{formatAmount(trip.profit)}</td>
                       <td className="px-6 py-4">
                         <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${trip.status === 'Active' ? 'bg-blue-100 text-blue-600' : 'bg-green-100 text-green-600'}`}>
                           {trip.status}
@@ -206,12 +213,12 @@ useEffect(() => {
                     <div key={trip.id} className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
                     <div className="flex justify-between items-start mb-3">
                         <div>
-                        <h4 className="font-bold text-gray-900">{trip.route}</h4>
-                        <p className="text-xs text-gray-500">{trip.truck} • {trip.driver}</p>
+                          <h4 className="font-bold text-gray-900">{trip.route}</h4>
+                          <p className="text-xs text-gray-500">{trip.truck} • {trip.driver}</p>
                         </div>
-                        <span className="bg-blue-100 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">
-                        Active
-                        </span>
+                        <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${trip.status === 'Active' ? 'bg-blue-100 text-blue-600' : 'bg-green-100 text-green-600'}`}>
+                          {trip.status}
+                          </span>
                     </div>
       
                 <div className="flex justify-between items-center mt-4">

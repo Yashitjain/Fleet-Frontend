@@ -41,7 +41,7 @@ const VehicleList = () => {
                 <div className="bg-blue-50 p-3 rounded-xl"><Truck size={20} className="text-blue-500" /></div>
                 <div>
                   <h3 className="font-black text-gray-900 text-sm uppercase">{v.vehicleNumber}</h3>
-                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">Owner ID: {v.ownerId}</p>
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">Owner: {v.ownerName}</p>
                 </div>
               </div>
             ))}
