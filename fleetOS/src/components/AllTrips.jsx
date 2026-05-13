@@ -115,7 +115,7 @@ const AllTrips = () => {
                     </td>
                     <td className="px-6 py-4">
                       <div className="text-sm text-gray-600 flex items-center gap-1">
-                        <Calendar size={14} /> {trip.date || '12 May 2026'}
+                        <Calendar size={14} /> {trip.startDate || '12 May 2026'}
                       </div>
                     </td>
                     <td className="px-6 py-4">
@@ -151,38 +151,71 @@ const AllTrips = () => {
                 onClick={() => navigate(`/trip/${trip.id}`)}
                 className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm active:scale-[0.98] transition-all"
               >
+                {/* Status and Pricing Row */}
                 <div className="flex justify-between items-start mb-4">
-                  <span className={`text-[9px] font-black px-2 py-0.5 rounded uppercase ${getStatusColor(trip.status)}`}>
+                  <span className={`text-[9px] font-black px-2 py-1 rounded uppercase ${getStatusColor(trip.status)}`}>
                     {trip.status}
                   </span>
-                  <div>
-                    <p className="font-black text-gray-900">₹{trip.freightPrice?.toLocaleString('en-IN')}</p>
-                    <p className="font-black text-green-600">₹{trip.profit?.toLocaleString('en-IN')}</p>
+                  <div className="text-right">
+                    <p className="font-black text-gray-900 text-base leading-tight">₹{trip.freightPrice?.toLocaleString('en-IN')}</p>
+                    <p className="font-black text-green-600 text-xs">₹{trip.profit?.toLocaleString('en-IN')} Profit</p>
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="h-10 w-1 bg-gray-200 rounded-full"></div>
-                  <div className="flex flex-col gap-1">
-                    <div className="text-sm font-bold text-gray-800">{trip.source}</div>
-                    <div className="text-sm font-bold text-gray-800">{trip.destination}</div>
+                {/* Route and Dates Row */}
+                <div className="flex items-center justify-between mb-5">
+                  <div className="flex items-center gap-3">
+                    {/* Vertical Timeline Bar */}
+                    <div className="flex flex-col items-center gap-1">
+                      <div className="h-2 w-2 rounded-full border-2 border-blue-500 bg-white"></div>
+                      <div className="h-6 w-0.5 bg-gray-100 rounded-full"></div>
+                      <div className="h-2 w-2 rounded-full border-2 border-gray-300 bg-white"></div>
+                    </div>
+                    
+                    <div className="flex flex-col justify-between h-12">
+                      <div className="text-sm font-black text-gray-800 leading-none">{trip.source}</div>
+                      <div className="text-sm font-black text-gray-800 leading-none">{trip.destination}</div>
+                    </div>
+                  </div>
+
+                  {/* --- NEW DATE SECTION --- */}
+                  <div className="text-right flex flex-col justify-between h-10 border-l border-gray-50 pl-4">
+                    <div>
+                      <p className="text-[9px] font-bold text-gray-400 uppercase leading-none">Start</p>
+                      <p className="text-[11px] font-black text-gray-700">{trip.startDate || '11 May'}</p>
+                    </div>
+                    <div className="mt-1">
+                      <p className="text-[9px] font-bold text-gray-400 uppercase leading-none">End</p>
+                      <p className="text-[11px] font-black text-gray-700">{trip.endDate || '--'}</p>
+                    </div>
                   </div>
                 </div>
 
+                {/* Footer Info Row */}
                 <div className="flex justify-between items-center pt-4 border-t border-gray-50">
                   <div className="flex items-center gap-2">
-                    <div className="bg-gray-100 p-2 rounded-lg"><Truck size={14} className="text-gray-500"/></div>
+                    <div className="bg-gray-50 p-2 rounded-xl border border-gray-100">
+                      <Truck size={14} className="text-gray-400"/>
+                    </div>
                     <div className="text-xs">
-                      <p className="font-bold text-gray-800 uppercase">{trip.vehicleNumber}</p>
-                      <p className="text-gray-400">{trip.driverName}</p>
+                      <p className="font-black text-gray-800 uppercase tracking-tight">{trip.vehicleNumber}</p>
+                      <p className="text-gray-400 font-bold">{trip.driverName}</p>
                     </div>
                   </div>
-                  <ChevronRight size={18} className="text-gray-300" />
+
+                  {/* Optional: Small badge for trip days */}
+                  <div className="flex items-center gap-2">
+                    {trip.endDate && (
+                      <span className="text-[10px] font-black bg-blue-50 text-blue-600 px-2 py-0.5 rounded-lg">
+                        {trip.endDate && trip.startDate ? `${Math.ceil((new Date(trip.endDate) - new Date(trip.startDate)) / (1000 * 60 * 60 * 24))} din` : 'N/A'}
+                      </span>
+                    )}
+                    <ChevronRight size={18} className="text-gray-300" />
+                  </div>
                 </div>
               </div>
             ))}
           </div>
-
           {/* Empty State */}
           {!loading && trips.length === 0 && (
             <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-gray-200 mt-6">

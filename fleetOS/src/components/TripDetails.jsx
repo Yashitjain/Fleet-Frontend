@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { 
   ArrowLeft, Truck, User, Fuel, Wrench, Plus, 
-  CheckCircle2, Receipt 
+  CheckCircle2, Receipt, ChevronRight 
 } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../service/api'; 
@@ -34,6 +34,7 @@ const TripDetails = () => {
   }, [fetchTripDetails]);
 
   const handleAddExpense = (id) => navigate(`/trip/${id}/add-expense`);
+  const handleEditExpense = (expenseId, tripId) => navigate(`/trip/${tripId}/expense/edit/${expenseId}`); 
 
   const handleCompleteTrip = async (id) => {
     try {
@@ -89,13 +90,13 @@ const TripDetails = () => {
 
             {/* DESKTOP ACTIONS */}
             <div className="hidden md:flex gap-3">
-              {trip.status === 'Active' && (
+              {trip.status === 'ACTIVE' && (
                 <>
                   <button className="bg-white border border-gray-200 px-4 py-2 rounded-lg font-bold text-gray-600 hover:bg-gray-50 transition-all shadow-sm" onClick={() => handleAddExpense(tripId)}>
                     + Kharcha Add Karo
                   </button> 
-                  <button className="bg-[#0f172a] text-white px-4 py-2 rounded-lg font-bold flex items-center gap-2 hover:bg-black transition-all shadow-lg" onClick={() => handleCompleteTrip(tripId)}>
-                    <CheckCircle2 size={18} /> Trip Khatam Karo
+                  <button className="w-1/2 bg-green-600 text-white px-1 py-4 rounded-2xl font-black flex items-center justify-center gap-2 shadow-xl active:scale-95 " onClick={() => handleCompleteTrip(tripId)}>
+                    <CheckCircle2 size={18} /> Trip Khatam Karo 
                   </button>
                 </>
               )}
@@ -103,16 +104,6 @@ const TripDetails = () => {
           </div>
 
           {/* MOBILE ACTIONS - Logic applied here specifically */}
-          {trip.status === 'Active' && (
-            <div className="flex flex-col gap-2 w-full mt-6 md:hidden">
-              <button className="w-full bg-[#0f172a] text-white py-4 rounded-2xl font-black flex items-center justify-center gap-2 shadow-xl active:scale-95" onClick={() => handleCompleteTrip(tripId)}>
-                <CheckCircle2 size={20} /> Trip Khatam Karo
-              </button>
-              <button className="w-full bg-white border border-gray-200 py-4 rounded-2xl font-black text-gray-600 flex items-center justify-center gap-2 shadow-sm" onClick={() => handleAddExpense(tripId)}>
-                + Kharcha Add Karo
-              </button> 
-            </div>
-          )}
         </header>
 
         <div className="px-4 md:px-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -149,49 +140,91 @@ const TripDetails = () => {
             <div className="bg-white rounded-3xl shadow-sm border border-gray-100 min-h-[400px] overflow-hidden">
               <div className="p-6 flex justify-between items-center border-b border-gray-50">
                 <h3 className="font-black text-gray-900 text-lg uppercase tracking-tight">Kharche ki List</h3>
-                {trip.status === 'Active' && (
+                {trip.status === 'ACTIVE' && (
                   <button className="bg-[#0f172a] text-white text-[10px] font-black uppercase px-3 py-2 rounded-lg" onClick={() => handleAddExpense(tripId)}>
                     + Add
                   </button>
                 )}
               </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-left">
+              
+              {/* Table wrapper - removed overflow-x-auto to prevent horizontal scrolling */}
+              <div className="w-full">
+                <table className="w-full text-left table-fixed"> {/* table-fixed helps control widths */}
                   <thead className="bg-gray-50 text-[10px] text-gray-400 font-black uppercase tracking-widest">
                     <tr>
-                      <th className="px-6 py-4">Type</th>
-                      <th className="px-6 py-4">Note</th>
-                      <th className="px-6 py-4 text-right">Amount</th>
+                      <th className="px-4 md:px-6 py-4 w-[40%]">Type/Note</th>
+                      <th className="px-4 md:px-6 py-4 text-right w-[40%]">Amount</th>
+                      <th className="px-4 md:px-6 py-4 text-right w-[40%]">Date</th>
+                      {/* Action column is narrow and fixed to the right */}
+                      {trip.status === 'ACTIVE' && <th className="px-4 py-4 w-[20%]"></th>}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-50">
                     {kharche.map((item) => (  
-                      <tr key={item.id} className="hover:bg-gray-50 transition-colors">
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-3">
-                            <div className="bg-gray-50 w-10 h-10 rounded-xl flex items-center justify-center border border-gray-100">{item.icon}</div>
-                            <span className="text-xs font-black text-gray-400 uppercase">{item.type}</span>
+                      <tr 
+                        key={item.id} 
+                        className="hover:bg-gray-50 transition-colors cursor-pointer group"
+                        onClick={() => trip.status === 'ACTIVE' && handleEditExpense(item.id, tripId)}
+                      >
+                        {/* Note & Type combined to save horizontal space */}
+                        <td className="px-4 md:px-6 py-4">
+                          <div className="flex items-center gap-2 md:gap-3">
+                            <div className="bg-gray-50 min-w-[32px] h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center border border-gray-100 flex-shrink-0">
+                              {item.icon}
+                            </div>
+                            <div className="truncate">
+                              <p className="font-bold text-gray-800 text-sm  ">{item.note}</p>
+                              <p className="text-[9px] md:text-[10px] text-gray-400 font-black uppercase">{item.type}</p>
+                            </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4">
-                          <p className="font-bold text-gray-800 text-sm">{item.note}</p>
-                          <p className="text-[10px] text-gray-400 font-medium">{item.date}</p>
+
+                        {/* Amount - moved closer to the left for visibility */}
+                        <td className="px-4 md:px-6 py-4 text-right">
+                          <p className="font-black text-gray-900 text-sm md:text-base">₹{item.amount.toLocaleString('en-IN')}</p>
+                          {/* <p className="text-[9px] text-gray-400 md:hidden">{item.date}</p> */}
                         </td>
-                        <td className="px-6 py-4 text-right font-black text-gray-900">₹{item.amount.toLocaleString('en-IN')}</td>
+                        {/* Date of Expense */}
+                        <td className="px-4 md:px-6 py-4 text-right">
+                          <p className="font-black text-gray-900 text-sm md:text-base">₹{item.date}</p>
+                        </td>
+
+                        {/* ACTION: Edit Icon visible on right without scrolling */}
+                        {trip.status === 'ACTIVE' && (
+                          <td className="px-4 py-4 text-right">
+                            <div className="flex justify-end">
+                              <div className="p-1.5 bg-blue-50 text-blue-600 rounded-md group-hover:bg-blue-600 group-hover:text-white transition-all">
+                                <ChevronRight size={14} />
+                              </div>
+                            </div>
+                          </td>
+                        )}
                       </tr>
                     ))}
+                    
                     {kharche.length === 0 && (
-                       <tr><td colSpan="3" className="text-center py-20 text-gray-400 font-bold italic">No expenses added.</td></tr>
+                      <tr><td colSpan="3" className="text-center py-20 text-gray-400 font-bold italic">No expenses added.</td></tr>
                     )}
                   </tbody>
                 </table>
               </div>
+              
               <div className="p-6 border-t border-gray-50 flex justify-between items-center bg-gray-50/30">
                 <span className="font-black text-gray-400 uppercase text-xs tracking-widest">Kul Kharcha</span>
                 <span className="text-2xl font-black text-red-500">₹{trip.totalExpense?.toLocaleString('en-IN') || 0}</span>
               </div>
             </div>
           </div>
+          {trip.status === 'ACTIVE' ? (
+            <div className="flex flex-row gap-2 w-full mt-6 md:hidden">
+              <button className="w-1/2 bg-white border border-gray-200 py-4 rounded-2xl font-black text-gray-600 flex items-center justify-center gap-2 shadow-sm" onClick={() => handleAddExpense(tripId)}>
+                + Kharcha Add Karo
+              </button> 
+              <button className="w-1/2 bg-green-600 text-white px-1 py-4 rounded-2xl font-black text-sm flex items-center justify-center gap-2 shadow-xl active:scale-95 " onClick={() => handleCompleteTrip(tripId)}>
+                <CheckCircle2 size={20} /> Trip Khatam Karo
+              </button>
+            </div>
+          ) : null}
         </div>
       </main>
 
